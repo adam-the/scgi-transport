@@ -21,6 +21,7 @@ package scgi
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"io"
 	"mime/multipart"
 	"net"
