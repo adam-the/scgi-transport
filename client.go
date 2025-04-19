@@ -116,7 +116,12 @@ func (c *client) Request(p map[string]string, req io.Reader) (resp *http.Respons
 		return
 	}
 
-	rb := bufio.NewReader(r)
+	sr, ok := r.(*streamReader)
+	if !ok {
+		return nil, fmt.Errorf("internal error: expected *streamReader, got %T", r)
+	}
+
+	rb := bufio.NewReader(sr)
 	tp := textproto.NewReader(rb)
 	resp = new(http.Response)
 
@@ -171,6 +176,7 @@ func (c *client) Request(p map[string]string, req io.Reader) (resp *http.Respons
 		Reader: rb,
 		status: resp.StatusCode,
 		logger: noopLogger,
+		r:      sr,
 	}
 	if chunked(resp.TransferEncoding) {
 		closer.Reader = httputil.NewChunkedReader(rb)
