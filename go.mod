@@ -1,4 +1,4 @@
-module github.com/Elegant996/scgi-transport
+module github.com/adam-the/scgi-transport
 
 go 1.21.0
 
